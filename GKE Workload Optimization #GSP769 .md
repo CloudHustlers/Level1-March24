@@ -1,5 +1,6 @@
 # GSP769
 ## Run in cloudshell
+## work in progress ⚠️
 ```cmd
 export ZONE=
 ```
