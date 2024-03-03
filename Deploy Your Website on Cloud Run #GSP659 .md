@@ -8,10 +8,9 @@ gcloud services enable artifactregistry.googleapis.com \
 cloudbuild.googleapis.com \
 run.googleapis.com
 git clone https://github.com/googlecodelabs/monolith-to-microservices.git
-cd ~/monolith-to-microservices./setup.sh
+cd ~/monolith-to-microservices
 ./setup.sh
 cd ~/monolith-to-microservices/monolith
-npm start
 gcloud artifacts repositories create monolith-demo --location=$REGION --repository-format=docker
 gcloud auth configure-docker $REGION-docker.pkg.dev
 gcloud builds submit --tag $REGION-docker.pkg.dev/$DEVSHELL_PROJECT_ID/monolith-demo/monolith:1.0.0
