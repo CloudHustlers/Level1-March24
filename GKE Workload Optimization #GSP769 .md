@@ -1,6 +1,5 @@
 # GSP769
 ## Run in cloudshell
-## work in progress ⚠️
 ```cmd
 export ZONE=
 ```
@@ -56,6 +55,9 @@ spec:
         number: 80
 EOF
 kubectl apply -f gb_frontend_ingress.yaml
+sleep 40
+BACKEND_SERVICE=$(gcloud compute backend-services list | grep NAME | cut -d ' ' -f2)
+gcloud compute backend-services get-health $BACKEND_SERVICE --global
 gsutil -m cp -r gs://spls/gsp769/locust-image .
 gcloud builds submit \
 --tag gcr.io/${GOOGLE_CLOUD_PROJECT}/locust-tasks:latest locust-image
@@ -85,6 +87,7 @@ spec:
       periodSeconds: 10
 EOF
 kubectl apply -f liveness-demo.yaml
+sleep 60
 kubectl exec liveness-demo-pod -- rm /tmp/alive
 cat << EOF > readiness-demo.yaml
 apiVersion: v1
@@ -123,7 +126,12 @@ spec:
     demo: readiness-probe
 EOF
 kubectl apply -f readiness-demo.yaml
+sleep 20
 kubectl exec readiness-demo-pod -- touch /tmp/healthz
+```
+### Check the progress till task 3 after running the down command check the last task progress
+```cmd
+kubectl delete pod gb-frontend
 cat << EOF > gb_frontend_deployment.yaml
 apiVersion: apps/v1
 kind: Deployment
